@@ -8,7 +8,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='autorounddecimal',
-    version="0.0.2",
+    version="0.0.4",
     description='automatic rounding decimal ',
     url='https://github.com/niitsuma/autorounddecimal/',
     author='Hirotaka Niitsuma',

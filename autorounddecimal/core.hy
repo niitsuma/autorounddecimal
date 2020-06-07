@@ -1,25 +1,7 @@
 
 (import [decimal [*]])
 
-;; (defn float2remove_zero_padding [value &optional [min_zero_count 4]]
-;;   (setv 
-;;     d (Decimal value)
-;;     ;;d (d1.normalize)
-;;     s1 (d.to_eng_string)
-;;     es (s1.split "E")
-;;     s2 (get es 0)
-;;     s (get (s2.split (* "0" min_zero_count)) 0)
-;;     )
-;;   ;;(print d1 d)
-;;   (print d s1 s2 s)
-;;   (print  es)
-;;   (if (= (len es) 1)
-;;       (Decimal s)
-;;       (Decimal (+ s "E" (get es -1)))
-;;       )
-;;   )
 
-;;;;; do in tuple slow but safe
 (defn decimal_remove_zero_padding [d &optional [min_count 4]]
   (setv 
     t  (d.as_tuple)
@@ -31,9 +13,11 @@
   (for [c gs]
     ;;(print c n_0 g)
     (if (= c 0)
-        (if (>= n_0 (- min_count 1))
-            (break)
-            (+= n_0 1))
+        (do
+          (+= n_0 1)        
+          (if (>= n_0 min_count)
+              (break)
+            ))
         (do 
           (+= g (* [0] n_0 ))
           (setv n_0 0)
@@ -45,11 +29,9 @@
              (+ t.exponent (- (len gs) (len g) ))
              )))
 
+;;(decimal_remove_zero_padding (Decimal "0.01230000234"))
 
 
-
-;; (import math)
-;; (math.log10 2312300000234.123)
 
 (defn decimal_remove_nine_padding [d &optional [min_count 4]]
   (setv
@@ -95,8 +77,8 @@
     (lif d0 (setv d d0))
     (setv
       d1  (d.normalize)
-      d2  (decimal_remove_zero_padding d1)
-      d0  (decimal_remove_nine_padding d2)
+      d2  (decimal_remove_zero_padding d1 min_count)
+      d0  (decimal_remove_nine_padding d2 min_count)
       )
     ;;(print d d1 d2 d0)
     )
@@ -106,97 +88,5 @@
 
 (defn adround [value &optional [min_count 4]]
   (float (decimal_round_digit (Decimal value) min_count)))
-
-
-;; (adround 0.000320009999)
-
-;; (setv d (float2remove_zero_padding 0.000320009999))
-;; (setv d (float2remove_zero_padding 0.000000020039999))
-;; (setv t (d.as_tuple))
-;; (setv g (t.digits))
-;; (setv g_delta (+ (* (- (len g) 1) [0]) [1]))
-;; (setv d_delta (Decimal (DecimalTuple t.sign (tuple g_delta)  t.exponent)))
-  
-;;   (setv d2 (.normalize (+ d d_delta)))  ;; (print es (len es))
-  ;; (print s1)
-  ;; (print s2)
-  ;; (print s)
-
-;;   d2
-;;   (len (. (d2.as_tuple) digits))
-  
-;; (.normalize (- d d_delta))
-
-
-;; ;;(float d2)
-
-;; g
-
-;; g
-
-;; t
-
-
-
-;; (d.next_minus)
-;; (d.next_plus)
-
-;; next_minus(context=None)
-
-;; next_plus(context=None)¶
-;; d
-
-      
-;; (Decimal 0.000000020039999)
-;;   (print s)
-
-;;   nomalized_decimal .000320009999)  (print s)
-
-;;   (print s)
-
-;; ;; (Decimal.from_float 0.1)
-
-;; ;; (setv d (Decimal 12.3999))12.00039999
-;; ;; (setv d (Decimal 12.3999))
-;; ;; (setv d (Decimal 12.00039999))
-
-;; ;; (setv d (Decimal "12.00039999"))
-
-;; (setv s (.to_eng_string (Decimal "0.000000020039999")))
-;; (setv s (.to_eng_string (Decimal "0.020039999")))
-
-;; (get (s.split "E") -1)
-
-
-;; d
-;; (dir d)
-;; (.normalize (d.normalize))
-
-;; d
-;; (dir d)
-;; (.normalize (d.normalize))
-
-;; (d.remainder_near)(setv d (Decimal 12.3999))
-
-
-;; (d.quantize)
-
-;; (setv t  (d.as_tuple))
-;; (setv s (d.to_eng_string))
-;; (setv min_zero_count 4)
-;; (* "0" min_zero_count)
-
-;; (s.split "0000")
-
-
-;; from collections import namedtuple
-;; (require [hy.extra.anaphoric [*]])
-
-;; (setv g []
-;;       n_zero 0
-;;       min_zero_count 4
-;;       )
-
-;; ;; (+ [1 2] (* [0] 4))
 
 

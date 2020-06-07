@@ -133,6 +133,30 @@
     (adround 3.200001)
     (adround 3.19999)
     3.2)
-  
-    
 )
+
+(defn hy_test2 []
+  (assert-all-equal
+    (decimal_remove_zero_padding (Decimal "0.01230000234") :min_count 4)
+    (decimal_round_digit         (Decimal "0.01230000234") :min_count 4)
+    (Decimal "0.0123"))
+  (assert-all-equal
+    (decimal_remove_zero_padding (Decimal "0.01230000234") :min_count 5)
+    (decimal_round_digit         (Decimal "0.01230000234") :min_count 5)
+    (Decimal "0.01230000234"))
+
+  (assert-all-equal
+    (adround 3.20000123)
+    (adround 3.20000123 :min_count 4)
+    3.2)
+  (eq_
+    (adround 3.20000123 :min_count 5)
+    3.20000123)
+  (eq_
+    (adround 3.200000123 :min_count 5)
+    3.2)
+  (eq_
+    (adround 3.200000123 :min_count 6)
+    3.200000123)
+  )
+  
